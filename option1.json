@@ -1,0 +1,69 @@
+{
+    "head": {
+      "docType": "schematic",
+      "editorVersion": "6.5.22"
+    },
+    "title": "Antenna Analyzer Option 1",
+    "description": "Raspberry Pi + AD9850 + Directional Coupler + AD8302",
+    "schematic": {
+      "components": [
+        {
+          "type": "connector",
+          "name": "J1",
+          "value": "Raspberry Pi GPIO",
+          "position": [100, 100]
+        },
+        {
+          "type": "ic",
+          "name": "U1",
+          "value": "AD9850 DDS",
+          "position": [250, 100]
+        },
+        {
+          "type": "connector",
+          "name": "J2",
+          "value": "Directional Coupler",
+          "position": [400, 100]
+        },
+        {
+          "type": "connector",
+          "name": "J3",
+          "value": "Antenna",
+          "position": [550, 100]
+        },
+        {
+          "type": "ic",
+          "name": "U2",
+          "value": "AD8302",
+          "position": [400, 200]
+        },
+        {
+          "type": "connector",
+          "name": "J4",
+          "value": "To Pi ADC",
+          "position": [250, 250]
+        },
+        {
+          "type": "gnd",
+          "name": "GND1",
+          "position": [400, 300]
+        }
+      ],
+      "wires": [
+        [[100, 100], [250, 100]],
+        [[250, 100], [400, 100]],
+        [[400, 100], [550, 100]],
+        [[400, 100], [400, 200]],
+        [[400, 200], [250, 250]],
+        [[400, 200], [400, 300]]
+      ],
+      "labels": [
+        {"text": "Pi GPIO", "position": [90, 90]},
+        {"text": "AD9850 DDS", "position": [240, 90]},
+        {"text": "Directional Coupler", "position": [390, 90]},
+        {"text": "Antenna", "position": [540, 90]},
+        {"text": "AD8302", "position": [390, 190]},
+        {"text": "To Pi ADC", "position": [240, 240]}
+      ]
+    }
+  }
