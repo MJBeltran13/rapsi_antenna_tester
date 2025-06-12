@@ -1,4 +1,7 @@
 # Raspberry Pi specific requirements for antenna analyzer
+# ⚠️  WARNING: These packages ONLY work on Raspberry Pi Linux!
+# ⚠️  DO NOT install on Windows - use requirements.txt instead
+
 RPi.GPIO>=0.7.1
 spidev>=3.6
 numpy>=1.20.0

@@ -455,6 +455,7 @@ Try the one-click sweep to see how it works!"""
         button_frame.grid(row=2, column=0, sticky=(tk.W, tk.E), pady=(10, 0))
         
         ttk.Button(button_frame, text="Save Results", command=self.save_results).pack(side=tk.LEFT, padx=(0, 5))
+        ttk.Button(button_frame, text="History", command=self.show_history).pack(side=tk.LEFT, padx=(0, 5))
         ttk.Button(button_frame, text="Clear", command=self.clear_results).pack(side=tk.LEFT, padx=(0, 5))
         if MOCK_MODE:
             ttk.Button(button_frame, text="Demo Info", command=self.show_demo_info).pack(side=tk.LEFT, padx=(0, 5))
@@ -649,6 +650,177 @@ Try the one-click sweep to see how it works!"""
             messagebox.showinfo("Success", f"Results saved to {filename}")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to save results: {e}")
+    
+    def show_history(self):
+        """Show history of saved test results"""
+        import glob
+        json_files = glob.glob("antenna_test_*.json")
+        
+        if not json_files:
+            messagebox.showinfo("History", "No previous test results found.")
+            return
+        
+        # Sort files by modification time (newest first)
+        json_files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+        
+        # Create history window
+        history_window = tk.Toplevel(self.root)
+        history_window.title("Test History")
+        history_window.geometry("700x500")
+        history_window.transient(self.root)
+        history_window.grab_set()
+        
+        # Header
+        header_label = tk.Label(history_window, text=f"Test History - Found {len(json_files)} test(s)",
+                               font=('Arial', 14, 'bold'))
+        header_label.pack(pady=10)
+        
+        # Main frame
+        main_frame = tk.Frame(history_window)
+        main_frame.pack(fill='both', expand=True, padx=20, pady=10)
+        
+        # Create scrollable list
+        list_frame = tk.Frame(main_frame)
+        list_frame.pack(fill='both', expand=True)
+        
+        # Scrollbar
+        scrollbar = tk.Scrollbar(list_frame)
+        scrollbar.pack(side='right', fill='y')
+        
+        # Listbox
+        self.history_listbox = tk.Listbox(list_frame, font=('Courier', 9),
+                                        yscrollcommand=scrollbar.set)
+        self.history_listbox.pack(side='left', fill='both', expand=True)
+        scrollbar.config(command=self.history_listbox.yview)
+        
+        # Populate list with test summaries
+        self.history_files = []
+        for filename in json_files:
+            try:
+                with open(filename, 'r') as f:
+                    data = json.load(f)
+                
+                # Extract key information
+                timestamp = data.get('timestamp', 'Unknown')
+                if timestamp != 'Unknown':
+                    try:
+                        dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+                        date_str = dt.strftime('%Y-%m-%d %H:%M:%S')
+                    except:
+                        date_str = timestamp[:19]
+                else:
+                    date_str = 'Unknown'
+                
+                params = data.get('parameters', {})
+                rating_info = data.get('rating', {})
+                
+                start_freq = params.get('start_freq_mhz', 'N/A')
+                stop_freq = params.get('stop_freq_mhz', 'N/A')
+                rating = rating_info.get('rating', 'N/A')
+                score = rating_info.get('score', 0)
+                
+                demo_mode = data.get('demo_mode', False)
+                demo_text = " [DEMO]" if demo_mode else ""
+                
+                # Format list entry
+                entry_text = f"{date_str} | {start_freq}-{stop_freq} MHz | {rating} ({score:.0f}/100){demo_text}"
+                self.history_listbox.insert(tk.END, entry_text)
+                self.history_files.append(filename)
+                
+            except Exception as e:
+                # If file is corrupted, show basic info
+                mod_time = datetime.fromtimestamp(os.path.getmtime(filename))
+                date_str = mod_time.strftime('%Y-%m-%d %H:%M:%S')
+                entry_text = f"{date_str} | {filename} | [ERROR: Cannot read file]"
+                self.history_listbox.insert(tk.END, entry_text)
+                self.history_files.append(filename)
+        
+        # Buttons frame
+        button_frame = tk.Frame(history_window)
+        button_frame.pack(fill='x', padx=20, pady=10)
+        
+        # Load button
+        ttk.Button(button_frame, text="Load Selected", 
+                  command=lambda: self.load_history_file(history_window)).pack(side='left', padx=(0, 5))
+        
+        # Delete button
+        ttk.Button(button_frame, text="Delete Selected", 
+                  command=lambda: self.delete_history_file(history_window)).pack(side='left', padx=(0, 5))
+        
+        # Close button
+        ttk.Button(button_frame, text="Close", command=history_window.destroy).pack(side='right')
+        
+        # Double-click to load
+        self.history_listbox.bind('<Double-1>', lambda e: self.load_history_file(history_window))
+    
+    def load_history_file(self, history_window):
+        """Load selected history file"""
+        selection = self.history_listbox.curselection()
+        if not selection:
+            messagebox.showwarning("Warning", "Please select a test to load.")
+            return
+        
+        filename = self.history_files[selection[0]]
+        
+        try:
+            with open(filename, 'r') as f:
+                data = json.load(f)
+            
+            # Load measurements
+            self.measurements = data.get('measurements', [])
+            
+            # Update parameters
+            params = data.get('parameters', {})
+            self.start_freq_var.set(str(params.get('start_freq_mhz', '1.0')))
+            self.stop_freq_var.set(str(params.get('stop_freq_mhz', '30.0')))
+            self.points_var.set(str(params.get('points', '100')))
+            
+            # Update display
+            rating_result = data.get('rating', {})
+            if rating_result:
+                # Calculate sweep time (approximate)
+                sweep_time = len(self.measurements) * 0.01
+                self.update_results_display(rating_result, sweep_time)
+                self.plot_results()
+                
+                # Update status
+                timestamp = data.get('timestamp', 'Unknown')
+                if timestamp != 'Unknown':
+                    try:
+                        dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+                        date_str = dt.strftime('%Y-%m-%d %H:%M')
+                    except:
+                        date_str = timestamp[:16]
+                else:
+                    date_str = 'Unknown'
+                
+                self.status_var.set(f"Loaded test from {date_str} - Rating: {rating_result.get('rating', 'N/A')}")
+            
+            history_window.destroy()
+            messagebox.showinfo("Success", f"Loaded test results from {filename}")
+            
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load file {filename}:\n{e}")
+    
+    def delete_history_file(self, history_window):
+        """Delete selected history file"""
+        selection = self.history_listbox.curselection()
+        if not selection:
+            messagebox.showwarning("Warning", "Please select a test to delete.")
+            return
+        
+        filename = self.history_files[selection[0]]
+        
+        # Confirm deletion
+        if messagebox.askyesno("Confirm Delete", f"Are you sure you want to delete {filename}?"):
+            try:
+                os.remove(filename)
+                messagebox.showinfo("Success", f"Deleted {filename}")
+                history_window.destroy()
+                # Refresh history window
+                self.show_history()
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to delete {filename}:\n{e}")
     
     def clear_results(self):
         """Clear all results"""

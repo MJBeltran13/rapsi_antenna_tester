@@ -1,10 +1,12 @@
-# Core dependencies for antenna analyzer
+# Windows/Development dependencies for antenna analyzer
+# ✅ Safe to install on Windows for demo/development
+
 numpy>=1.20.0
 matplotlib>=3.5.0
 
-# Note: Install these on Raspberry Pi only:
-# RPi.GPIO>=0.7.1
+# ⚠️  Raspberry Pi hardware packages (DON'T install on Windows):
+# RPi.GPIO>=0.7.1  
 # spidev>=3.6
 
 # Built-in modules (no installation needed):
-# tkinter, datetime, json, os 
+# tkinter, datetime, json, os, time, random 

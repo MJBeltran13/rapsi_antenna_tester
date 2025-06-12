@@ -1,0 +1,11 @@
+# Modern Antenna Analyzer Requirements
+numpy>=1.20.0
+matplotlib>=3.5.0
+
+# For even more modern look, you could add:
+# customtkinter>=5.0.0
+# tkinter-tooltip>=2.0.0
+# pillow>=8.0.0
+
+# Built-in modules (no installation needed):
+# tkinter, datetime, json, os, time, random 
