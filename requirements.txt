@@ -1,0 +1,10 @@
+# Core dependencies for antenna analyzer
+numpy>=1.20.0
+matplotlib>=3.5.0
+
+# Note: Install these on Raspberry Pi only:
+# RPi.GPIO>=0.7.1
+# spidev>=3.6
+
+# Built-in modules (no installation needed):
+# tkinter, datetime, json, os 

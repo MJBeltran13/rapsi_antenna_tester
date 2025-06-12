@@ -1,0 +1,8 @@
+# Raspberry Pi specific requirements for antenna analyzer
+RPi.GPIO>=0.7.1
+spidev>=3.6
+numpy>=1.20.0
+matplotlib>=3.5.0
+
+# Built-in modules (no installation needed):
+# tkinter, datetime, json, os 
