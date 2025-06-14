@@ -19,6 +19,13 @@
 - Separates forward and reflected signals
 - [Available on Lazada](https://www.lazada.com.ph/products/pdp-i4871092638-s28286101362.html)
 
+battery https://www.lazada.com.ph/products/pdp-i4758996149-s27482027236.html?c=&channelLpJumpArgs=&clickTrackInfo=query%253Abattery%252Bshield%252Bf%252B18650%253Bnid%253A4758996149%253Bsrc%253ALazadaMainSrp%253Brn%253Afa7b5cf8e6fcf47df4401609a0dd8c62%253Bregion%253Aph%253Bsku%253A4758996149_PH%253Bprice%253A481%253Bclient%253Adesktop%253Bsupplier_id%253A1000253703%253Bbiz_source%253Ah5_internal%253Bslot%253A1%253Butlog_bucket_id%253A470687%253Basc_category_id%253A22654%253Bitem_id%253A4758996149%253Bsku_id%253A27482027236%253Bshop_id%253A426832%253BtemplateInfo%253A107881_A3_D_E%25231103_L%2523-1_C%2523&freeshipping=1&fs_ab=2&fuse_fs=&lang=en&location=China&price=481&priceCompare=skuId%3A27482027236%3Bsource%3Alazada-search-voucher%3Bsn%3Afa7b5cf8e6fcf47df4401609a0dd8c62%3BoriginPrice%3A48100%3BdisplayPrice%3A48100%3BsinglePromotionId%3A900000052234180%3BsingleToolCode%3ApromPrice%3BvoucherPricePlugin%3A0%3Btimestamp%3A1749886401090&ratingscore=&request_id=fa7b5cf8e6fcf47df4401609a0dd8c62&review=&sale=0&search=1&source=search&spm=a2o4l.searchlist.list.1&stock=1
+
+
+screen 
+https://www.lazada.com.ph/products/for-raspberry-pi-3b3b4b-display-35-inch-display-5-inch-raspberry-7-inch-hdmi-touch-screen-i299354170-s6934658106.html?
+
+
 #### **MCP3008 ADC** (~$3)
 - Converts analog signals to digital for Raspberry Pi
 
