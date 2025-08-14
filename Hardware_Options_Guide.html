@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antenna Analyzer - Hardware Options</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12pt;
+        line-height: 1.6;
+        color: #333;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    h1 {
+        color: #2c3e50;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 10px;
+        font-size: 24pt;
+        margin-top: 30px;
+    }
+    
+    h2 {
+        color: #34495e;
+        border-bottom: 2px solid #95a5a6;
+        padding-bottom: 8px;
+        font-size: 18pt;
+        margin-top: 30px;
+        page-break-before: avoid;
+    }
+    
+    h3 {
+        color: #2c3e50;
+        font-size: 14pt;
+        margin-top: 25px;
+        page-break-after: avoid;
+    }
+    
+    h4 {
+        color: #7f8c8d;
+        font-size: 12pt;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+    
+    code {
+        background-color: #f8f9fa;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-family: 'Courier New', monospace;
+        font-size: 10pt;
+        color: #e74c3c;
+    }
+    
+    pre {
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 5px;
+        padding: 15px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 9pt;
+        line-height: 1.4;
+        page-break-inside: avoid;
+    }
+    
+    pre code {
+        background-color: transparent;
+        padding: 0;
+        color: #2c3e50;
+    }
+    
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 15px 0;
+        page-break-inside: avoid;
+    }
+    
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+    
+    ul, ol {
+        margin: 10px 0;
+        padding-left: 25px;
+    }
+    
+    li {
+        margin: 5px 0;
+    }
+    
+    strong {
+        color: #2c3e50;
+        font-weight: bold;
+    }
+    
+    a {
+        color: #3498db;
+        text-decoration: none;
+    }
+    
+    a:hover {
+        text-decoration: underline;
+    }
+    
+    /* Print styles for PDF conversion */
+    @media print {
+        body {
+            margin: 0;
+            padding: 15mm;
+        }
+        
+        h1 {
+            page-break-before: auto;
+        }
+        
+        h1, h2, h3, h4 {
+            page-break-after: avoid;
+        }
+        
+        pre, table {
+            page-break-inside: avoid;
+        }
+        
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+        
+        @page {
+            margin: 20mm;
+            @top-center {
+                content: "Antenna Analyzer - Hardware Options";
+                font-size: 10pt;
+                color: #666;
+            }
+            @bottom-center {
+                content: counter(page);
+                font-size: 10pt;
+                color: #666;
+            }
+        }
+    }
+    </style>
+</head>
+<body>
+    <h1 id="antenna-analyzer">Antenna Analyzer</h1>
+
+<h2 id="hardware-setup">Hardware Setup</h2>
+
+<h3 id="components-needed">Components Needed:</h3>
+
+<h4 id="raspberry-pi-4gb-already-owned"><strong>Raspberry Pi 4GB</strong> (already owned)</h4>
+
+<ul>
+<li><strong>Purpose</strong>: Main processing unit running the analyzer software</li>
+<li><strong>Function</strong>: Controls all modules, processes measurements, generates user interface, and performs calculations</li>
+<li><strong>Connections</strong>: Provides GPIO pins for digital control signals, SPI interface for ADC communication, and power supply for connected modules</li>
+<li><strong>Role in System</strong>: Acts as the central controller coordinating frequency generation, signal measurement, and data analysis</li>
+</ul>
+
+<h4 id="ad9850-dds-module"><strong>AD9850 DDS Module</strong></h4>
+
+<ul>
+<li><strong>Purpose</strong>: Digital Direct Synthesis signal generator that creates precise test frequencies</li>
+<li><strong>Function</strong>: Generates clean sine wave signals from 1Hz to 40MHz for antenna testing</li>
+<li><strong>Technical Details</strong>: Uses phase accumulator and DAC to create frequencies with 32-bit resolution</li>
+<li><strong>Connection to System</strong>: Connected to Raspberry Pi GPIO pins for digital control (DATA, W<em>CLK, FQ</em>UD, RESET)</li>
+<li><strong>Signal Output</strong>: RF output connects to directional coupler input to inject test signal into antenna</li>
+<li><a href="https://www.lazada.com.ph/products/pdp-i4682284022-s27000512992.html">Available on Lazada</a></li>
+</ul>
+
+<h4 id="ad8302-rf-detector"><strong>AD8302 RF Detector</strong></h4>
+
+<ul>
+<li><strong>Purpose</strong>: Dual logarithmic amplifier for measuring RF signal magnitude and phase</li>
+<li><strong>Function</strong>: Simultaneously measures forward and reflected signal levels to calculate SWR</li>
+<li><strong>Technical Details</strong>: Provides linear voltage outputs proportional to signal magnitude and phase difference</li>
+<li><strong>Input Connections</strong>: 
+<ul>
+<li>INPA receives forward signal from directional coupler</li>
+<li>INPB receives reflected signal from directional coupler</li>
+</ul></li>
+<li><strong>Output Connections</strong>: 
+<ul>
+<li>VMAG (magnitude) and VPHS (phase) connect to MCP3008 ADC inputs</li>
+</ul></li>
+<li><strong>Power Requirements</strong>: Requires +5V supply (external power recommended)</li>
+<li><a href="https://www.lazada.com.ph/products/pdp-i4931232200-s28732350592.html">Available on Lazada</a></li>
+</ul>
+
+<h4 id="directional-coupler"><strong>Directional Coupler</strong></h4>
+
+<ul>
+<li><strong>Purpose</strong>: RF component that separates forward and reflected signals</li>
+<li><strong>Function</strong>: Allows simultaneous measurement of power going to antenna and power reflected back</li>
+<li><strong>Technical Details</strong>: Uses coupled transmission lines to sample forward and reverse power</li>
+<li><strong>Connection Points</strong>:
+<ul>
+<li>INPUT: Receives test signal from AD9850 DDS module</li>
+<li>OUTPUT: Connects to antenna under test</li>
+<li>FWD (Forward): Samples forward power, connects to AD8302 INPA</li>
+<li>REF (Reflected): Samples reflected power, connects to AD8302 INPB</li>
+</ul></li>
+<li><strong>Frequency Range</strong>: Typically operates from HF through VHF frequencies</li>
+<li><a href="https://www.lazada.com.ph/products/pdp-i4871092638-s28286101362.html">Available on Lazada</a></li>
+</ul>
+
+<h4 id="battery-power-supply"><strong>Battery Power Supply</strong></h4>
+
+<ul>
+<li><strong>Purpose</strong>: Provides portable power for field antenna testing</li>
+<li><strong>Function</strong>: 18650 battery shield supplies power to Raspberry Pi and connected modules</li>
+<li><strong>Connection</strong>: Powers Raspberry Pi via USB or GPIO power pins</li>
+<li><strong>Advantage</strong>: Enables antenna testing in remote locations without AC power</li>
+<li><a href="https://www.lazada.com.ph/products/pdp-i4758996149-s27482027236.html?c=&channelLpJumpArgs=&clickTrackInfo=query%253Abattery%252Bshield%252Bf%252B18650%253Bnid%253A4758996149%253Bsrc%253ALazadaMainSrp%253Brn%253Afa7b5cf8e6fcf47df4401609a0dd8c62%253Bregion%253Aph%253Bsku%253A4758996149_PH%253Bprice%253A481%253Bclient%253Adesktop%253Bsupplier_id%253A1000253703%253Bbiz_source%253Ah5_internal%253Bslot%253A1%253Butlog_bucket_id%253A470687%253Basc_category_id%253A22654%253Bitem_id%253A4758996149%253Bsku_id%253A27482027236%253Bshop_id%253A426832%253BtemplateInfo%253A107881_A3_D_E%25231103_L%2523-1_C%2523&freeshipping=1&fs_ab=2&fuse_fs=&lang=en&location=China&price=481&priceCompare=skuId%3A27482027236%3Bsource%3Alazada-search-voucher%3Bsn%3Afa7b5cf8e6fcf47df4401609a0dd8c62%3BoriginPrice%3A48100%3BdisplayPrice%3A48100%3BsinglePromotionId%3A900000052234180%3BsingleToolCode%3ApromPrice%3BvoucherPricePlugin%3A0%3Btimestamp%3A1749886401090&ratingscore=&request_id=fa7b5cf8e6fcf47df4401609a0dd8c62&review=&sale=0&search=1&source=search&spm=a2o4l.searchlist.list.1&stock=1">Battery Shield Link</a></li>
+</ul>
+
+<h4 id="display-screen-optional"><strong>Display Screen (Optional)</strong></h4>
+
+<ul>
+<li><strong>Purpose</strong>: Provides local display for antenna analyzer readings</li>
+<li><strong>Function</strong>: Shows real-time SWR measurements, frequency sweeps, and graphs</li>
+<li><strong>Options</strong>: 3.5", 5", or 7" HDMI touchscreen displays</li>
+<li><strong>Connection</strong>: HDMI output from Raspberry Pi</li>
+<li><strong>Benefit</strong>: Enables standalone operation without external computer</li>
+<li><a href="https://www.lazada.com.ph/products/for-raspberry-pi-3b3b4b-display-35-inch-display-5-inch-raspberry-7-inch-hdmi-touch-screen-i299354170-s6934658106.html?">Display Options</a></li>
+</ul>
+
+<h4 id="mcp3008-adc"><strong>MCP3008 ADC</strong></h4>
+
+<ul>
+<li><strong>Purpose</strong>: 8-channel 10-bit Analog-to-Digital Converter</li>
+<li><strong>Function</strong>: Converts analog voltage outputs from AD8302 to digital values for Raspberry Pi</li>
+<li><strong>Technical Details</strong>: 
+<ul>
+<li>10-bit resolution (1024 levels)</li>
+<li>8 single-ended input channels</li>
+<li>SPI interface for communication</li>
+</ul></li>
+<li><strong>Connection to System</strong>:
+<ul>
+<li>CH0 connects to AD8302 VMAG (magnitude measurement)</li>
+<li>CH1 connects to AD8302 VPHS (phase measurement)</li>
+<li>SPI interface connects to Raspberry Pi SPI0 port</li>
+</ul></li>
+<li><strong>Power Supply</strong>: 3.3V from Raspberry Pi</li>
+<li><strong>Role</strong>: Critical interface between analog RF measurements and digital processing</li>
+</ul>
+
+<hr />
+
+<h2 id="component-pinouts">Component Pinouts</h2>
+
+<h3 id="ad8302-rf-detector-pinout">AD8302 RF Detector Pinout:</h3>
+
+<p><strong>Purpose</strong>: Each pin serves a specific function in the logarithmic amplifier operation</p>
+
+<pre><code>AD8302 Module:
+Pin 1  - COMM     (Common/Ground) - Reference ground for all signals
+Pin 2  - INPA     (RF Input A - Forward signal) - Receives forward power sample
+Pin 3  - OFSA     (Offset A) - Magnitude offset adjustment for calibration
+Pin 4  - VPOS     (+5V Power) - Positive power supply input
+Pin 5  - OFST     (Offset) - Phase offset adjustment for calibration  
+Pin 6  - INPB     (RF Input B - Reflected signal) - Receives reflected power sample
+Pin 7  - COMM     (Common/Ground) - Additional ground connection
+
+Pin 8  - VFLT     (Filter voltage) - External filter capacitor connection
+Pin 9  - VPHS     (Phase output voltage) - Linear voltage proportional to phase difference
+Pin 10 - VREF     (Reference voltage) - Internal reference voltage output
+Pin 11 - MSET     (Magnitude set) - Magnitude measurement range setting
+Pin 12 - VMAG     (Magnitude output voltage) - Linear voltage proportional to signal ratio
+Pin 13 - MFLT     (Magnitude filter) - Magnitude output filter connection
+Pin 14 - VCC      (+5V Power) - Secondary power input
+</code></pre>
+
+<h3 id="ad9850-dds-module-pinout">AD9850 DDS Module Pinout:</h3>
+
+<p><strong>Purpose</strong>: Digital control interface for frequency synthesis</p>
+
+<pre><code>AD9850 Module:
+VCC    - +3.3V or +5V Power - Powers the DDS chip and supporting circuitry
+GND    - Ground - Reference ground for all signals
+DATA   - Serial data input - Receives 32-bit frequency control word serially
+W_CLK  - Word clock - Clock signal for shifting in data bits
+FQ_UD  - Frequency update - Latches new frequency setting when pulsed
+RESET  - Reset (active high) - Resets DDS to default state when high
+OUT    - RF signal output - Sine wave output at programmed frequency
+OUTB   - Inverted RF output (not used) - Complementary output (unused)
+</code></pre>
+
+<h3 id="mcp3008-adc-pinout">MCP3008 ADC Pinout:</h3>
+
+<p><strong>Purpose</strong>: Analog-to-digital conversion with SPI interface</p>
+
+<pre><code>MCP3008:
+Pin 1  - CH0     (Analog input 0) - Connected to AD8302 VMAG for magnitude
+Pin 2  - CH1     (Analog input 1) - Connected to AD8302 VPHS for phase
+Pin 3  - CH2     (Analog input 2) - Unused analog input
+Pin 4  - CH3     (Analog input 3) - Unused analog input
+Pin 5  - CH4     (Analog input 4) - Unused analog input  
+Pin 6  - CH5     (Analog input 5) - Unused analog input
+Pin 7  - CH6     (Analog input 6) - Unused analog input
+Pin 8  - CH7     (Analog input 7) - Unused analog input
+Pin 9  - DGND    (Digital ground) - Ground reference for digital signals
+Pin 10 - CS      (Chip select) - SPI chip select (active low)
+Pin 11 - DIN     (Data input) - SPI data input from Raspberry Pi
+Pin 12 - DOUT    (Data output) - SPI data output to Raspberry Pi
+Pin 13 - CLK     (Clock) - SPI clock signal
+Pin 14 - AGND    (Analog ground) - Ground reference for analog signals
+Pin 15 - VREF    (Reference voltage) - ADC reference voltage (3.3V)
+Pin 16 - VDD     (Power supply) - Digital power supply (3.3V)
+</code></pre>
+
+<h3 id="raspberry-pi-gpio-pinout-relevant-pins">Raspberry Pi GPIO Pinout (relevant pins):</h3>
+
+<p><strong>Purpose</strong>: Interface connections between Raspberry Pi and modules</p>
+
+<pre><code>Physical Pin → GPIO → Function → Connected To
+Pin 1        → 3.3V → Power → MCP3008 VDD, VREF; AD9850 VCC
+Pin 6        → GND  → Ground → All module ground connections
+Pin 12       → 18   → W_CLK (AD9850) → AD9850 word clock input
+Pin 16       → 23   → DATA (AD9850) → AD9850 serial data input
+Pin 18       → 24   → FQ_UD (AD9850) → AD9850 frequency update
+Pin 19       → 10   → SPI0_MOSI → MCP3008 DIN (data to ADC)
+Pin 21       → 9    → SPI0_MISO → MCP3008 DOUT (data from ADC)
+Pin 22       → 25   → RESET (AD9850) → AD9850 reset control
+Pin 23       → 11   → SPI0_SCLK → MCP3008 CLK (SPI clock)
+Pin 24       → 8    → SPI0_CE0 → MCP3008 CS (chip select)
+</code></pre>
+
+<hr />
+
+<h2 id="how-to-build">How to Build</h2>
+
+<h3 id="step-1-wiring-connections">Step 1: Wiring Connections</h3>
+
+<h4 id="ad9850-dds-module-to-raspberry-pi">AD9850 DDS Module to Raspberry Pi:</h4>
+
+<p><strong>Purpose</strong>: Provides digital control of frequency generation</p>
+
+<pre><code>AD9850    →    Raspberry Pi    →    Function
+VCC       →    3.3V (Pin 1)    →    Power supply for DDS chip
+GND       →    GND (Pin 6)     →    Common ground reference
+DATA      →    GPIO 23 (Pin 16) →   Serial data for frequency control
+W_CLK     →    GPIO 18 (Pin 12) →   Clock for data shifting
+FQ_UD     →    GPIO 24 (Pin 18) →   Update signal for new frequency
+RESET     →    GPIO 25 (Pin 22) →   Reset control for initialization
+</code></pre>
+
+<h4 id="ad8302-rf-detector-to-raspberry-pi">AD8302 RF Detector to Raspberry Pi:</h4>
+
+<p><strong>Purpose</strong>: Measures RF signal levels and converts to analog voltages</p>
+
+<pre><code>AD8302    →    Connection      →    Function
+VPOS      →    5V (external)   →    Power supply (requires 5V, not 3.3V)
+COMM      →    GND (Pin 6)     →    Ground reference
+VMAG      →    MCP3008 CH0     →    Magnitude measurement to ADC
+VPHS      →    MCP3008 CH1     →    Phase measurement to ADC
+</code></pre>
+
+<h4 id="mcp3008-adc-to-raspberry-pi">MCP3008 ADC to Raspberry Pi:</h4>
+
+<p><strong>Purpose</strong>: Converts analog measurements to digital data via SPI</p>
+
+<pre><code>MCP3008   →    Raspberry Pi    →    Function
+VDD       →    3.3V (Pin 1)    →    Digital power supply
+VREF      →    3.3V (Pin 1)    →    ADC reference voltage
+AGND      →    GND (Pin 6)     →    Analog ground
+DGND      →    GND (Pin 6)     →    Digital ground
+CLK       →    SPI0 SCLK (Pin 23) → SPI clock signal
+DOUT      →    SPI0 MISO (Pin 21) → Data from ADC to Pi
+DIN       →    SPI0 MOSI (Pin 19) → Data from Pi to ADC
+CS        →    SPI0 CE0 (Pin 24)  → Chip select (enables ADC)
+
+CH0       →    AD8302 VMAG     →    Receives magnitude voltage
+CH1       →    AD8302 VPHS     →    Receives phase voltage
+</code></pre>
+
+<h4 id="rf-signal-path">RF Signal Path:</h4>
+
+<p><strong>Purpose</strong>: Routes test signals through the measurement system</p>
+
+<pre><code>Signal Flow Direction:
+AD9850 OUT → Directional Coupler INPUT (Test signal injection)
+Directional Coupler FWD → AD8302 INPA (Forward power sample)
+Directional Coupler REF → AD8302 INPB (Reflected power sample)  
+Directional Coupler OUTPUT → Antenna Under Test (Test signal to antenna)
+</code></pre>
+
+<h3 id="step-2-software-setup">Step 2: Software Setup</h3>
+
+<h4 id="install-required-packages">Install Required Packages:</h4>
+
+<div class="codehilite">
+<pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3-pip<span class="w"> </span>python3-numpy<span class="w"> </span>python3-matplotlib
+pip3<span class="w"> </span>install<span class="w"> </span>RPi.GPIO<span class="w"> </span>spidev
+</code></pre>
+</div>
+
+<h4 id="enable-spi">Enable SPI:</h4>
+
+<p><strong>Purpose</strong>: Activates hardware SPI interface for ADC communication</p>
+
+<div class="codehilite">
+<pre><span></span><code>sudo<span class="w"> </span>raspi-config
+<span class="c1"># Navigate to: Interfacing Options → SPI → Enable</span>
+sudo<span class="w"> </span>reboot
+</code></pre>
+</div>
+
+<h3 id="step-3-assembly">Step 3: Assembly</h3>
+
+<ol>
+<li><p><strong>Mount components</strong> on a breadboard or PCB</p>
+
+<ul>
+<li><strong>Purpose</strong>: Provides mechanical support and organized connections</li>
+<li><strong>Considerations</strong>: Use proper RF grounding techniques for high-frequency signals</li>
+</ul></li>
+<li><p><strong>Connect all wires</strong> according to the wiring diagram above</p>
+
+<ul>
+<li><strong>Wire Types</strong>: Use appropriate wire gauges and types (coax for RF signals)</li>
+<li><strong>Grounding</strong>: Ensure solid ground connections for accurate measurements</li>
+</ul></li>
+<li><p><strong>Add BNC connectors</strong> for antenna connection</p>
+
+<ul>
+<li><strong>Purpose</strong>: Provides standard 50-ohm RF interface for antenna testing</li>
+<li><strong>Installation</strong>: Mount on enclosure with proper grounding</li>
+</ul></li>
+<li><p><strong>Install in enclosure</strong> (optional but recommended)</p>
+
+<ul>
+<li><strong>Benefits</strong>: Protects circuits, provides RF shielding, enables portable use</li>
+<li><strong>Considerations</strong>: Include ventilation and access to controls</li>
+</ul></li>
+</ol>
+
+<h3 id="step-4-calibration">Step 4: Calibration</h3>
+
+<h4 id="why-calibration-is-critical">Why Calibration is Critical:</h4>
+
+<p>Calibration compensates for system errors and ensures accurate measurements</p>
+
+<ol>
+<li><p><strong>Short circuit calibration</strong>: Connect a short to the antenna port</p>
+
+<ul>
+<li><strong>Purpose</strong>: Establishes reference for 100% reflection (infinite SWR)</li>
+<li><strong>Measurement</strong>: Records system response to perfect reflector</li>
+</ul></li>
+<li><p><strong>Open circuit calibration</strong>: Leave antenna port open</p>
+
+<ul>
+<li><strong>Purpose</strong>: Another reference for 100% reflection with different phase</li>
+<li><strong>Measurement</strong>: Records system response to open termination</li>
+</ul></li>
+<li><p><strong>50Ω load calibration</strong>: Connect a known 50Ω load</p>
+
+<ul>
+<li><strong>Purpose</strong>: Establishes reference for zero reflection (SWR = 1:1)</li>
+<li><strong>Measurement</strong>: Records system response to perfect match</li>
+</ul></li>
+</ol>
+
+<h3 id="step-5-testing">Step 5: Testing</h3>
+
+<ol>
+<li><p><strong>Run the Python script</strong></p>
+
+<ul>
+<li><strong>Function</strong>: Initializes all modules and starts measurement software</li>
+</ul></li>
+<li><p><strong>Connect a known good antenna</strong></p>
+
+<ul>
+<li><strong>Purpose</strong>: Provides realistic test load with known characteristics</li>
+</ul></li>
+<li><p><strong>Perform frequency sweep</strong></p>
+
+<ul>
+<li><strong>Process</strong>: Automatically steps through frequency range taking measurements</li>
+</ul></li>
+<li><p><strong>Verify SWR readings make sense</strong></p>
+
+<ul>
+<li><strong>Validation</strong>: Compare results with expected antenna characteristics</li>
+</ul></li>
+</ol>
+
+<hr />
+
+<h2 id="what-it-can-measure">What It Can Measure</h2>
+
+<ul>
+<li><strong>SWR (Standing Wave Ratio)</strong>: Indicates antenna impedance match quality</li>
+<li><strong>Impedance</strong> (R + jX): Complex impedance showing resistance and reactance</li>
+<li><strong>Return Loss</strong>: Power ratio between incident and reflected signals (in dB)</li>
+<li><strong>Frequency sweeps</strong>: Automated measurements across frequency ranges (1Hz - 40MHz)</li>
+<li><strong>Resonant frequency</strong>: Frequency where antenna impedance is purely resistive</li>
+</ul>
+
+<hr />
+
+<h2 id="code-example">Code Example</h2>
+
+<div class="codehilite">
+<pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">RPi.GPIO</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">GPIO</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">spidev</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AntennaAnalyzer</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># AD9850 pins</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">W_CLK</span> <span class="o">=</span> <span class="mi">18</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FQ_UD</span> <span class="o">=</span> <span class="mi">24</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DATA</span> <span class="o">=</span> <span class="mi">23</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RESET</span> <span class="o">=</span> <span class="mi">25</span>
+
+        <span class="c1"># Setup</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spi</span> <span class="o">=</span> <span class="n">spidev</span><span class="o">.</span><span class="n">SpiDev</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spi</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_gpio</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_dds</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">GPIO</span><span class="o">.</span><span class="n">setmode</span><span class="p">(</span><span class="n">GPIO</span><span class="o">.</span><span class="n">BCM</span><span class="p">)</span>
+        <span class="n">GPIO</span><span class="o">.</span><span class="n">setup</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">W_CLK</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">FQ_UD</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">RESET</span><span class="p">],</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span>
+        <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">W_CLK</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">FQ_UD</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">DATA</span><span class="p">],</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
+        <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RESET</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">HIGH</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_dds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RESET</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">HIGH</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+        <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RESET</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+        <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RESET</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">HIGH</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq_hz</span><span class="p">):</span>
+        <span class="c1"># Calculate frequency word</span>
+        <span class="n">freq_word</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">freq_hz</span> <span class="o">*</span> <span class="mf">4294967296.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">125000000.0</span><span class="p">)</span>
+
+        <span class="c1"># Send frequency data</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">):</span>
+            <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="p">(</span><span class="n">freq_word</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">31</span><span class="o">-</span><span class="n">i</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W_CLK</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">HIGH</span><span class="p">)</span>
+            <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W_CLK</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
+
+        <span class="c1"># Send control byte</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+            <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
+            <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W_CLK</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">HIGH</span><span class="p">)</span>
+            <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W_CLK</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
+
+        <span class="c1"># Update</span>
+        <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FQ_UD</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">HIGH</span><span class="p">)</span>
+        <span class="n">GPIO</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FQ_UD</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_adc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">):</span>
+        <span class="c1"># Read MCP3008 ADC</span>
+        <span class="n">adc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spi</span><span class="o">.</span><span class="n">xfer2</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">8</span> <span class="o">+</span> <span class="n">channel</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">((</span><span class="n">adc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">adc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">voltage</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">*</span> <span class="mf">3.3</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1024.0</span>
+        <span class="k">return</span> <span class="n">voltage</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_swr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Read AD8302 via ADC</span>
+        <span class="n">mag_voltage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_adc</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Channel 0 = magnitude</span>
+
+        <span class="c1"># Convert to SWR</span>
+        <span class="n">mag_db</span> <span class="o">=</span> <span class="p">(</span><span class="n">mag_voltage</span> <span class="o">-</span> <span class="mf">0.9</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.03</span>
+        <span class="n">reflection_coeff</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">mag_db</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">reflection_coeff</span> <span class="o">&gt;=</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">999</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">reflection_coeff</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">reflection_coeff</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">measure_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq_hz</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_frequency</span><span class="p">(</span><span class="n">freq_hz</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_swr</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">sweep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_freq</span><span class="p">,</span> <span class="n">stop_freq</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+        <span class="n">frequencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start_freq</span><span class="p">,</span> <span class="n">stop_freq</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span>
+        <span class="n">swr_data</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">frequencies</span><span class="p">:</span>
+            <span class="n">swr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_frequency</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
+            <span class="n">swr_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">swr</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">freq</span><span class="o">/</span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MHz: SWR </span><span class="si">{</span><span class="n">swr</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">frequencies</span><span class="p">,</span> <span class="n">swr_data</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_swr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frequencies</span><span class="p">,</span> <span class="n">swr_data</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">frequencies</span><span class="o">/</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">swr_data</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (MHz)&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;SWR&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Antenna SWR&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Usage</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">AntennaAnalyzer</span><span class="p">()</span>
+
+    <span class="c1"># Test single frequency</span>
+    <span class="n">swr</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">measure_frequency</span><span class="p">(</span><span class="mf">14.2e6</span><span class="p">)</span>  <span class="c1"># 14.2 MHz</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SWR at 14.2 MHz: </span><span class="si">{</span><span class="n">swr</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Frequency sweep</span>
+    <span class="n">freqs</span><span class="p">,</span> <span class="n">swr_vals</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">sweep</span><span class="p">(</span><span class="mf">10e6</span><span class="p">,</span> <span class="mf">30e6</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">analyzer</span><span class="o">.</span><span class="n">plot_swr</span><span class="p">(</span><span class="n">freqs</span><span class="p">,</span> <span class="n">swr_vals</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="usage">Usage</h2>
+
+<ol>
+<li><strong>Connect the hardware components</strong> according to the detailed wiring diagrams</li>
+<li><strong>Run the Python script</strong> to initialize all modules and start measurements</li>
+<li><strong>Test individual frequencies</strong> or perform automated frequency sweeps</li>
+<li><strong>View SWR plots</strong> to analyze antenna performance and identify resonant frequencies</li>
+</ol>
+
+<p>This comprehensive setup provides professional-grade antenna analysis capabilities with detailed explanations of each component's role and connections.</p>
+
+</body>
+</html>
